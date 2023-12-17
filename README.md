@@ -8,7 +8,7 @@ Start by cloning the example project with the following command:
 
 ```shell
 git clone https://github.com/ElMehdijebbour/Federated-Learning-LogReg.git
-
+```
 
 ## Project Setup
 
