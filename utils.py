@@ -36,27 +36,61 @@ def set_model_params(
         model.intercept_ = params[1]
     return model
 
-def load_heart_disease_data() -> Dataset:
-    """Loads the Heart Disease dataset from UCI ML repository and handles NaN values."""
-    heart_disease = fetch_ucirepo(id=45)
-    X = heart_disease.data.features
-    y = heart_disease.data.targets
+def load_heart_disease_data(user_id: int) -> ((np.ndarray, np.ndarray), (np.ndarray, np.ndarray)):
+    """
+    Load a specific heart disease dataset based on the provided user ID.
 
-    # Convert target variable to binary (0 or 1)
-    y = np.where(y > 0, 1, 0)
+    Parameters:
+    user_id (int): User ID to determine which dataset to load.
 
-    # Impute NaN values in features
-    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
-    X_imputed = imputer.fit_transform(X)
+    Returns:
+    A tuple containing the training and testing data: ((x_train, y_train), (x_test, y_test))
+    """
 
+    column_names = [
+        "age", "sex", "cp", "trestbps", "chol", "fbs", "restecg",
+        "thalach", "exang", "oldpeak", "slope", "ca", "thal", "num"
+    ]
 
-    # Calculate the split index for an 80:20 split
-    split_index = int(len(X_imputed) * 0.8)
-    x_train, y_train = X_imputed[:split_index], y[:split_index]
-    x_test, y_test = X_imputed[split_index:], y[split_index:]
-    # Check feature consistency
-    assert x_train.shape[1] == x_test.shape[1], "Mismatch in the number of features between train and test sets"
-    return (x_train, y_train), (x_test, y_test)
+    # Paths to different datasets
+    dataset_paths = {
+        1: './data_heart/processed.cleveland.data',
+        2: './data_heart/processed.hungarian.data',
+        3: './data_heart/processed.switzerland.data',
+        4: './data_heart/processed.va.data'
+    }
+
+    # Check if the user ID is valid and in the mapping
+    if user_id in dataset_paths:
+        dataset_path = dataset_paths[user_id]
+        df = pd.read_csv(dataset_path, delimiter=',', names=column_names, na_values='?')
+
+        # Prepare features and targets using column names
+        X = df.drop('num', axis=1).values  # Drop the 'num' column to get the features
+        y = df['num'].values  # Select only the 'num' column as the target
+
+        print(y.shape)
+        # Convert target variable to binary (0 or 1)
+        y = np.where(y > 0, 1, 0)
+
+        # Impute NaN values in features
+        imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+        X_imputed = imputer.fit_transform(X)
+
+        # Calculate the split index for an 80:20 split
+        split_index = int(len(X_imputed) * 0.8)
+        x_train, y_train = X_imputed[:split_index], y[:split_index]
+        x_test, y_test = X_imputed[split_index:], y[split_index:]
+
+        # Check feature consistency
+        assert x_train.shape[1] == x_test.shape[1], "Mismatch in the number of features between train and test sets"
+
+        return (x_train, y_train), (x_test, y_test)
+    else:
+        raise ValueError("Invalid user ID. Please provide a valid user ID.")
+
+# Example usage
+
 
 def set_initial_params(model: LogisticRegression):
     """Sets initial parameters as zeros. Required since model params are uninitialized

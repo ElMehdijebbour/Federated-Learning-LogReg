@@ -1,20 +1,22 @@
-# Flower Example using XGBoost
+# Federated Learning with Logistic Regression on Heart Disease Dataset
 
-This example demonstrates how to perform EXtreme Gradient Boosting (XGBoost) within Flower using `xgboost` package.
-We use [HIGGS](https://archive.ics.uci.edu/dataset/280/higgs) dataset for this example to perform a binary classification task.
-Tree-based with bagging method is used for aggregation on the server.
+This example demonstrates how to perform logistic regression within the Flower framework for federated learning. We are using the [Heart Disease dataset](https://archive.ics.uci.edu/dataset/45/heart+disease) from the UCI Machine Learning Repository, focusing on a binary classification task to predict the presence of heart disease.
 
-This project provides a minimal code example to enable you to get stated quickly. For a more comprehensive code example, take a look at [xgboost-comprehensive](https://github.com/adap/flower/tree/main/examples/xgboost-comprehensive).
+## Project Setup
+
+Start by cloning the example project with the following command:
+
+```shell
+git clone https://github.com/ElMehdijebbour/Federated-Learning-LogReg.git
+
 
 ## Project Setup
 
 Start by cloning the example project. We prepared a single-line command that you can copy into your shell which will checkout the example for you:
 
-```shell
-git clone --depth=1 https://github.com/adap/flower.git && mv flower/examples/xgboost-quickstart . && rm -rf flower && cd xgboost-quickstart
-```
 
-This will create a new directory called `xgboost-quickstart` containing the following files:
+
+This will create a new directory called `Federated-Learning-LogReg` containing the following files:
 
 ```
 -- README.md         <- Your're reading this right now
@@ -76,7 +78,7 @@ Start client 2 in the second terminal:
 python3 client.py --node-id=1
 ```
 
-You will see that XGBoost is starting a federated training.
+You will see that Logistic regression is starting a federated training.
 
 Alternatively, you can use `run.sh` to run the same experiment in a single terminal as follows:
 
@@ -84,5 +86,3 @@ Alternatively, you can use `run.sh` to run the same experiment in a single termi
 poetry run ./run.sh
 ```
 
-Look at the [code](https://github.com/adap/flower/tree/main/examples/xgboost-quickstart)
-and [tutorial](https://flower.dev/docs/framework/tutorial-quickstart-xgboost.html) for a detailed explanation.

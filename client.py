@@ -1,19 +1,21 @@
 import warnings
 import flwr as fl
 import numpy as np
-
+import argparse
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import log_loss
 
 import utils  # Ensure utils contains the modified functions for heart disease dataset
 
 if __name__ == "__main__":
-    # Load Heart Disease dataset
-    (X_train, y_train), (X_test, y_test) = utils.load_heart_disease_data()
+    # Parse command line arguments for user ID
+    parser = argparse.ArgumentParser(description='Start a Flower client with specific dataset based on user ID.')
+    parser.add_argument('--user_id', type=int, required=True, help='User ID to load specific dataset')
+    args = parser.parse_args()
+    user_id = args.user_id
 
-    # Split train set into 10 partitions and randomly use one for training.
-    partition_id = np.random.choice(10)
-    (X_train, y_train) = utils.partition(X_train, y_train, 10)[partition_id]
+    # Load Heart Disease dataset based on the user ID
+    (X_train, y_train), (X_test, y_test) = utils.load_heart_disease_data(user_id)
 
     # Create LogisticRegression Model
     model = LogisticRegression(
